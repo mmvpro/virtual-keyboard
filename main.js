@@ -106,6 +106,14 @@ function renderKeyText(key) {
     textArea.value += ' ';
     return;
   }
+  if (key.id === 'tab') {
+    textArea.value += '    ';
+    return;
+  }
+  if (key.id === 'capslock' || key.id === 'shift' || key.id === 'control' || key.id === 'win' || key.id === 'alt') {
+    textArea.value += '';
+    return;
+  }
 
   textArea.value += key.innerText;
 }
@@ -161,7 +169,10 @@ function renderKey() {
     keyboard.append(key);
 
     key.addEventListener('mousedown', (e) => {
-      e.target.classList.add('active');
+      const k = e.target;
+      if (k.id === 'shift' || k.id === 'control' || k.id === 'capslock' || k.id === 'alt') {
+        k.classList.toggle('active');
+      } else k.classList.add('active');
 
       if (keyText === 'Backspace') {
         backspace();
@@ -173,6 +184,15 @@ function renderKey() {
       }
 
       renderKeyText(key);
+    });
+    key.addEventListener('mouseup', (e) => {
+      textArea.focus();
+      const k = e.target;
+      console.dir(k.id);
+      if (k.id === 'shift' || k.id === 'control' || k.id === 'capslock' || k.id === 'alt') {
+        return;
+      }
+      key.classList.remove('active');
     });
   });
 }
