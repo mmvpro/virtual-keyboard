@@ -1,68 +1,17 @@
+let langRu = true;
 const keys = [
-  '`',
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '0',
-  '-',
-  '=',
-  'Backspace',
-  'Tab',
-  'q',
-  'w',
-  'e',
-  'r',
-  't',
-  'y',
-  'u',
-  'i',
-  'o',
-  'p',
-  '[',
-  ']',
-  '\\',
-  'Delete',
-  'CapsLock',
-  'a',
-  's',
-  'd',
-  'f',
-  'g',
-  'h',
-  'j',
-  'k',
-  'l',
-  ';',
-  "'",
-  'Enter',
-  'Shift',
-  'z',
-  'x',
-  'c',
-  'v',
-  'b',
-  'n',
-  'm',
-  ',',
-  '.',
-  '/',
-  'ArrowUp',
-  'Shift',
-  'Control',
-  'win',
-  'Alt',
-  'Space',
-  'Alt',
-  'ArrowLeft',
-  'ArrowDown',
-  'ArrowRight',
-  'Control'
+  '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
+  'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'Delete',
+  'CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'Enter',
+  'ShiftLeft', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'ArrowUp', 'ShiftRight',
+  'ControlLeft', 'win', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'
+];
+const keysRu = [
+  'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
+  'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'Delete',
+  'CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', "'", 'Enter',
+  'ShiftLeft', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '/', 'ArrowUp', 'ShiftRight',
+  'ControlLeft', 'win', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'
 ];
 
 const body = document.body;
@@ -112,7 +61,7 @@ function renderKeyText(key) {
     textArea.value += '    ';
     return;
   }
-  if (key.id === 'capslock' || key.id === 'shift' || key.id === 'control' || key.id === 'win' || key.id === 'alt') {
+  if (key.id === 'capslock' || key.id === 'shiftleft' || key.id === 'shiftright' || key.id === 'controlleft' || key.id === 'controlright' || key.id === 'win' || key.id === 'altleft' || key.id === 'altright') {
     textArea.value += '';
     return;
   }
@@ -151,10 +100,13 @@ function setUpDown() {
       key.id === 'tab'
       || key.id === 'backspace'
       || key.id === 'capslock'
-      || key.id === 'shift'
-      || key.id === 'control'
+      || key.id === 'shiftleft'
+      || key.id === 'shiftright'
+      || key.id === 'controlleft'
+      || key.id === 'controlright'
       || key.id === 'win'
-      || key.id === 'alt'
+      || key.id === 'altleft'
+      || key.id === 'altright'
       || key.id === 'enter'
       || key.id === 'space'
       || key.id === 'delete'
@@ -170,7 +122,9 @@ function capslock() {
 
 function shift() {
   const fl = [
-    ['`', '~'], ['1', '!'], ['2', '@'], ['3', '#'], ['4', '$'], ['5', '%'], ['6', '^'], ['7', '&'], ['8', '*'], ['9', '('], ['0', ')'], ['-', '_'], ['=', '+']
+    // function s(){ return langRu ? 'ё' : '`' }
+
+    [langRu ? 'ё' : '`', '~'], ['1', '!'], ['2', '@'], ['3', '#'], ['4', '$'], ['5', '%'], ['6', '^'], ['7', '&'], ['8', '*'], ['9', '('], ['0', ')'], ['-', '_'], ['=', '+']
   ];
   if (!capslockIsActive) setUpDown();
 
@@ -187,7 +141,7 @@ function shift() {
   }
 }
 function renderKey() {
-  const data = keys;
+  const data = langRu ? keysRu : keys;
   console.log(data);
   data.forEach((keyText, index) => {
     const key = document.createElement('div');
@@ -208,6 +162,12 @@ function renderKey() {
     } else if (keyText === 'Delete') {
       console.log(keyText);
       key.innerText = 'Del';
+    } else if (keyText === 'ShiftRight' || keyText === 'ShiftLeft') {
+      key.innerText = 'Shift';
+    } else if (keyText === 'ControlRight' || keyText === 'ControlLeft') {
+      key.innerText = 'Ctrl';
+    } else if (keyText === 'AltRight' || keyText === 'AltLeft') {
+      key.innerText = 'Alt';
     } else {
       key.innerText = keyText;
     }
@@ -216,10 +176,10 @@ function renderKey() {
 
     key.addEventListener('mousedown', (e) => {
       const k = e.target;
-      if (k.id === 'shift' || k.id === 'control' || k.id === 'capslock' || k.id === 'alt') {
+      if (k.id === 'shiftleft' || k.id === 'shiftright' || k.id === 'controlleft' || k.id === 'capslock' || k.id === 'altleft') {
         k.classList.toggle('active');
         if (k.id === 'capslock') capslock();
-        if (k.id === 'shift') shift();
+        if (k.id === 'shiftleft' || k.id === 'shiftright') shift();
       } else k.classList.add('active');
 
       if (keyText === 'Backspace') {
@@ -237,7 +197,7 @@ function renderKey() {
       textArea.focus();
       const k = e.target;
       console.dir(k.id);
-      if (k.id === 'shift' || k.id === 'control' || k.id === 'capslock' || k.id === 'alt') {
+      if (k.id === 'shiftleft' || k.id === 'shiftright' || k.id === 'controlleft' || k.id === 'capslock' || k.id === 'altleft') {
         return;
       }
       key.classList.remove('active');

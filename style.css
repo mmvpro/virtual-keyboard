@@ -95,11 +95,13 @@ body {
   width: 12.5vw;
 }
 
-#shift {
+#shiftleft,
+#shiftright {
   width: 12.5vw;
 }
 
-#control {
+#controlleft,
+#controlright {
   width: 6.4vw;
 }
 
@@ -151,11 +153,13 @@ body {
     width: 125px;
   }
 
-  #shift {
+  #shiftleft,
+  #shiftright {
     width: 125px;
   }
 
-  #control {
+  #controlleft,
+  #controlright {
     width: 64px;
   }
 }
