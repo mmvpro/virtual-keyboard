@@ -1,0 +1,13 @@
+{
+  "name": "virtual-keyboard",
+  "version": "1.0.0",
+  "description": "virtual-keyboard",
+  "main": "main.js",
+  "scripts": {
+    "lint": "eslint ./",
+    "fix": "eslint --fix ./"
+  },
+  "devDependencies": {
+    "eslint": "^8.39.0"
+  }
+}
