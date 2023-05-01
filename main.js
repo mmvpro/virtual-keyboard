@@ -1,4 +1,6 @@
-let langRu = true;
+let langRu = false;
+langRu = (localStorage.getItem('langRu') === 'true');
+
 const keys = [
   '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
   'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'Delete',
@@ -30,7 +32,12 @@ body.append(container);
 
 let allKeys;
 
-function renderKeyText(key) {
+function setLangLocalSorege() {
+  localStorage.setItem('langRu', langRu);
+}
+window.addEventListener('unload', setLangLocalSorege);
+
+function pushTextInTextArea(key) {
   textArea.focus();
 
   if (key.id === 'enter') {
@@ -93,6 +100,8 @@ function del() {
 }
 let capslockIsActive = false;
 let shiftIsActive = false;
+let ctrlLeftIsActive = false;
+let altLeftIsActive = false;
 function setUpDown() {
   for (let i = 0; i < allKeys.length; i += 1) {
     let key = allKeys[i];
@@ -122,8 +131,6 @@ function capslock() {
 
 function shift() {
   const fl = [
-    // function s(){ return langRu ? 'ё' : '`' }
-
     [langRu ? 'ё' : '`', '~'], ['1', '!'], ['2', '@'], ['3', '#'], ['4', '$'], ['5', '%'], ['6', '^'], ['7', '&'], ['8', '*'], ['9', '('], ['0', ')'], ['-', '_'], ['=', '+']
   ];
   if (!capslockIsActive) setUpDown();
@@ -137,6 +144,27 @@ function shift() {
     for (let i = 0; i < fl.length; i += 1) {
       allKeys[i].innerText = fl[i][0];
       shiftIsActive = !shiftIsActive;
+    }
+  }
+}
+function changeLang() {
+  if (ctrlLeftIsActive && altLeftIsActive) {
+    console.log('ctrlLeftIsActive: ', ctrlLeftIsActive);
+    console.log('langRu', langRu);
+    if (langRu) {
+      for (let i = 0; i < allKeys.length; i += 1) {
+        if (allKeys[i].id === keys[i]) {
+          allKeys[i].innerText = keys[i];
+        }
+      }
+      langRu = false;
+    } else {
+      for (let i = 0; i < allKeys.length; i += 1) {
+        if (allKeys[i].id === keys[i]) {
+          allKeys[i].innerText = keysRu[i];
+        }
+      }
+      langRu = true;
     }
   }
 }
@@ -180,6 +208,14 @@ function renderKey() {
         k.classList.toggle('active');
         if (k.id === 'capslock') capslock();
         if (k.id === 'shiftleft' || k.id === 'shiftright') shift();
+        if (k.id === 'controlleft') {
+          ctrlLeftIsActive = !ctrlLeftIsActive;
+          if (altLeftIsActive) changeLang();
+        }
+        if (k.id === 'altleft') {
+          altLeftIsActive = !altLeftIsActive;
+          changeLang();
+        }
       } else k.classList.add('active');
 
       if (keyText === 'Backspace') {
@@ -191,7 +227,7 @@ function renderKey() {
         return;
       }
 
-      renderKeyText(key);
+      pushTextInTextArea(key);
     });
     key.addEventListener('mouseup', (e) => {
       textArea.focus();
