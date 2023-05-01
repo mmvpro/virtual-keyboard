@@ -98,6 +98,17 @@ function del() {
 
   textArea.setSelectionRange(index, index);
 }
+function space() {
+  textArea.focus();
+  const index = textArea.selectionStart;
+
+  const s = textArea.value.charAt(index);
+  console.log('index: ', index, 's: ', s);
+  const newText = textArea.value.slice(0, index) + ' ' + textArea.value.slice(index);
+  textArea.value = newText;
+
+  textArea.setSelectionRange(index + 1, index + 1);
+}
 let capslockIsActive = false;
 let shiftIsActive = false;
 let ctrlLeftIsActive = false;
@@ -224,6 +235,10 @@ function renderKey() {
       }
       if (keyText === 'Delete') {
         del();
+        return;
+      }
+      if (keyText === 'Space') {
+        space();
         return;
       }
 
