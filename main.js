@@ -11,8 +11,16 @@ const keys = [
 const keysRu = [
   'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace',
   'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'Delete',
-  'CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', "'", 'Enter',
+  'CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter',
   'ShiftLeft', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '/', 'ArrowUp', 'ShiftRight',
+  'ControlLeft', 'win', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'
+];
+
+const keysCode = [
+  'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Dogot6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace',
+  'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Delete',
+  'CapsLock', 'keyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter',
+  'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight',
   'ControlLeft', 'win', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'
 ];
 
@@ -77,8 +85,6 @@ function backspace() {
   textArea.focus();
   const index = textArea.selectionStart;
 
-  const s = textArea.value.charAt(index - 1);
-  console.log('index: ', index, 's: ', s);
   const newText = textArea.value.slice(0, index - 1) + textArea.value.slice(index);
   textArea.value = newText;
 
@@ -88,8 +94,6 @@ function del() {
   textArea.focus();
   const index = textArea.selectionStart;
 
-  const s = textArea.value.charAt(index);
-  console.log('index: ', index, 's: ', s);
   const newText = textArea.value.slice(0, index) + textArea.value.slice(index + 1);
   textArea.value = newText;
 
@@ -165,8 +169,6 @@ function shift() {
 }
 function changeLang() {
   if (ctrlLeftIsActive && altLeftIsActive) {
-    console.log('ctrlLeftIsActive: ', ctrlLeftIsActive);
-    console.log('langRu', langRu);
     if (langRu) {
       for (let i = 0; i < allKeys.length; i += 1) {
         if (allKeys[i].id === keys[i]) {
@@ -184,9 +186,43 @@ function changeLang() {
     }
   }
 }
+
+function getKey(e) {
+  textArea.focus();
+  const code = e.code;
+
+  let index = keysCode.indexOf(code);
+  let key = allKeys[index];
+  if (key.id === 'shiftleft' || key.id === 'shiftright' || key.id === 'controlleft'
+  || key.id === 'capslock' || key.id === 'altleft') {
+    key.classList.toggle('active');
+    if (key.id === 'capslock') capslock();
+    if (key.id === 'shiftleft' || key.id === 'shiftright') shift();
+    if (key.id === 'controlleft') {
+      ctrlLeftIsActive = !ctrlLeftIsActive;
+      if (altLeftIsActive) changeLang();
+    }
+    if (key.id === 'altleft') {
+      altLeftIsActive = !altLeftIsActive;
+      changeLang();
+    }
+  } else key.classList.add('active');
+}
+function removeActive() {
+  for (let i = 0; i < allKeys.length; i += 1) {
+    const key = allKeys[i];
+    if (key.classList.contains('active')) {
+      if (key.id === 'shiftleft' || key.id === 'shiftright' || key.id === 'controlleft' || key.id === 'capslock' || key.id === 'altleft') i += 1;
+      else key.classList.remove('active');
+    }
+  }
+}
+
+body.addEventListener('keydown', getKey);
+textArea.addEventListener('keyup', removeActive);
+
 function renderKey() {
   const data = langRu ? keysRu : keys;
-  console.log(data);
   data.forEach((keyText, index) => {
     const key = document.createElement('div');
     key.className = 'key';
@@ -201,10 +237,8 @@ function renderKey() {
     } else if (keyText === 'ArrowRight') {
       key.innerText = '►';
     } else if (keyText === 'CapsLock') {
-      key.classList.add('key-text');
       key.innerText = 'Caps Lock';
     } else if (keyText === 'Delete') {
-      console.log(keyText);
       key.innerText = 'Del';
     } else if (keyText === 'ShiftRight' || keyText === 'ShiftLeft') {
       key.innerText = 'Shift';
@@ -256,7 +290,6 @@ function renderKey() {
     key.addEventListener('mouseup', (e) => {
       textArea.focus();
       const k = e.target;
-      console.dir(k.id);
       if (k.id === 'shiftleft' || k.id === 'shiftright' || k.id === 'controlleft' || k.id === 'capslock' || k.id === 'altleft') {
         return;
       }
