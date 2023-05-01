@@ -121,7 +121,17 @@ function backspace() {
 
   if (index > 1) textArea.setSelectionRange(index - 1, index - 1);
 }
+function del() {
+  textArea.focus();
+  const index = textArea.selectionStart;
 
+  const s = textArea.value.charAt(index);
+  console.log('index: ', index, 's: ', s);
+  const newText = textArea.value.slice(0, index) + textArea.value.slice(index + 1);
+  textArea.value = newText;
+
+  textArea.setSelectionRange(index, index);
+}
 function renderKey() {
   const data = keys;
   console.log(data);
@@ -155,6 +165,10 @@ function renderKey() {
 
       if (keyText === 'Backspace') {
         backspace();
+        return;
+      }
+      if (keyText === 'Delete') {
+        del();
         return;
       }
 
