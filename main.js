@@ -142,6 +142,8 @@ function del() {
 
   textArea.setSelectionRange(index, index);
 }
+let capslockIsActive = false;
+let shiftIsActive = false;
 function setUpDown() {
   for (let i = 0; i < allKeys.length; i += 1) {
     let key = allKeys[i];
@@ -159,6 +161,29 @@ function setUpDown() {
     ) {
       i += 1;
     } else key.classList.toggle('up');
+  }
+}
+function capslock() {
+  capslockIsActive = !capslockIsActive;
+  if (!shiftIsActive) setUpDown();
+}
+
+function shift() {
+  const fl = [
+    ['`', '~'], ['1', '!'], ['2', '@'], ['3', '#'], ['4', '$'], ['5', '%'], ['6', '^'], ['7', '&'], ['8', '*'], ['9', '('], ['0', ')'], ['-', '_'], ['=', '+']
+  ];
+  if (!capslockIsActive) setUpDown();
+
+  if (!shiftIsActive) {
+    for (let i = 0; i < fl.length; i += 1) {
+      allKeys[i].innerText = fl[i][1];
+      shiftIsActive = !shiftIsActive;
+    }
+  } else {
+    for (let i = 0; i < fl.length; i += 1) {
+      allKeys[i].innerText = fl[i][0];
+      shiftIsActive = !shiftIsActive;
+    }
   }
 }
 function renderKey() {
@@ -193,7 +218,8 @@ function renderKey() {
       const k = e.target;
       if (k.id === 'shift' || k.id === 'control' || k.id === 'capslock' || k.id === 'alt') {
         k.classList.toggle('active');
-        if (k.id === 'capslock') setUpDown();
+        if (k.id === 'capslock') capslock();
+        if (k.id === 'shift') shift();
       } else k.classList.add('active');
 
       if (keyText === 'Backspace') {
