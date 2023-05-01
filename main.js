@@ -109,6 +109,19 @@ function renderKeyText(key) {
 
   textArea.value += key.innerText;
 }
+
+function backspace() {
+  textArea.focus();
+  const index = textArea.selectionStart;
+
+  const s = textArea.value.charAt(index - 1);
+  console.log('index: ', index, 's: ', s);
+  const newText = textArea.value.slice(0, index - 1) + textArea.value.slice(index);
+  textArea.value = newText;
+
+  if (index > 1) textArea.setSelectionRange(index - 1, index - 1);
+}
+
 function renderKey() {
   const data = keys;
   console.log(data);
@@ -139,6 +152,11 @@ function renderKey() {
 
     key.addEventListener('mousedown', (e) => {
       e.target.classList.add('active');
+
+      if (keyText === 'Backspace') {
+        backspace();
+        return;
+      }
 
       renderKeyText(key);
     });
