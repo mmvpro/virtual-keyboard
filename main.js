@@ -79,6 +79,8 @@ keyboard.className = 'keyboard';
 container.append(textArea, keyboard);
 body.append(container);
 
+let allKeys;
+
 function renderKeyText(key) {
   textArea.focus();
 
@@ -140,6 +142,25 @@ function del() {
 
   textArea.setSelectionRange(index, index);
 }
+function setUpDown() {
+  for (let i = 0; i < allKeys.length; i += 1) {
+    let key = allKeys[i];
+    if (
+      key.id === 'tab'
+      || key.id === 'backspace'
+      || key.id === 'capslock'
+      || key.id === 'shift'
+      || key.id === 'control'
+      || key.id === 'win'
+      || key.id === 'alt'
+      || key.id === 'enter'
+      || key.id === 'space'
+      || key.id === 'delete'
+    ) {
+      i += 1;
+    } else key.classList.toggle('up');
+  }
+}
 function renderKey() {
   const data = keys;
   console.log(data);
@@ -172,6 +193,7 @@ function renderKey() {
       const k = e.target;
       if (k.id === 'shift' || k.id === 'control' || k.id === 'capslock' || k.id === 'alt') {
         k.classList.toggle('active');
+        if (k.id === 'capslock') setUpDown();
       } else k.classList.add('active');
 
       if (keyText === 'Backspace') {
@@ -195,6 +217,7 @@ function renderKey() {
       key.classList.remove('active');
     });
   });
+  allKeys = document.querySelectorAll('.key');
 }
 
 renderKey();
