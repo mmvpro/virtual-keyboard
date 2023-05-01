@@ -26,16 +26,22 @@ const keysCode = [
 
 const body = document.body;
 const container = document.createElement('main');
+const title = document.createElement('div');
 const textArea = document.createElement('textarea');
 const keyboard = document.createElement('section');
 
 container.className = 'container';
+title.className = 'title';
 textArea.className = 'text-area';
 textArea.setAttribute('autofocus', true);
 textArea.setAttribute('rows', '10');
 keyboard.className = 'keyboard';
+title.innerHTML = `
+<h1>RSS Виртуальная клавиатура</h1>
+<p>Для переключения языка комбинация: левыe ctrl + alt</p>
+`;
 
-container.append(textArea, keyboard);
+container.append(title, textArea, keyboard);
 body.append(container);
 
 let allKeys;
