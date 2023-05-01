@@ -39,41 +39,38 @@ window.addEventListener('unload', setLangLocalSorege);
 
 function pushTextInTextArea(key) {
   textArea.focus();
+  let text = key.innerText;
 
   if (key.id === 'enter') {
-    textArea.value += '\n';
-    return;
+    text = '\n';
   }
   if (key.id === 'arrowup') {
-    textArea.value += '▲';
-    return;
+    text = '▲';
   }
   if (key.id === 'arrowleft') {
-    textArea.value += '◄';
-    return;
+    text = '◄';
   }
   if (key.id === 'arrowdown') {
-    textArea.value += '▼';
-    return;
+    text = '▼';
   }
   if (key.id === 'arrowright') {
-    textArea.value += '►';
-    return;
+    text = '►';
   }
   if (key.id === 'space') {
-    textArea.value += ' ';
-    return;
+    text = ' ';
   }
   if (key.id === 'tab') {
-    textArea.value += '    ';
-    return;
+    text = '    ';
   }
   if (key.id === 'capslock' || key.id === 'shiftleft' || key.id === 'shiftright' || key.id === 'controlleft' || key.id === 'controlright' || key.id === 'win' || key.id === 'altleft' || key.id === 'altright') {
-    textArea.value += '';
     return;
   }
+  textArea.focus();
+  const index = textArea.selectionStart;
+  const newText = textArea.value.slice(0, index) + text + textArea.value.slice(index);
+  textArea.value = newText;
 
-  textArea.value += key.innerText;
+  textArea.setSelectionRange(index + 1, index + 1);
 }
 
 function backspace() {
@@ -102,13 +99,21 @@ function space() {
   textArea.focus();
   const index = textArea.selectionStart;
 
-  const s = textArea.value.charAt(index);
-  console.log('index: ', index, 's: ', s);
   const newText = textArea.value.slice(0, index) + ' ' + textArea.value.slice(index);
   textArea.value = newText;
 
   textArea.setSelectionRange(index + 1, index + 1);
 }
+function tab() {
+  textArea.focus();
+  const index = textArea.selectionStart;
+
+  const newText = textArea.value.slice(0, index) + '    ' + textArea.value.slice(index);
+  textArea.value = newText;
+
+  textArea.setSelectionRange(index + 4, index + 4);
+}
+
 let capslockIsActive = false;
 let shiftIsActive = false;
 let ctrlLeftIsActive = false;
@@ -239,6 +244,10 @@ function renderKey() {
       }
       if (keyText === 'Space') {
         space();
+        return;
+      }
+      if (keyText === 'Tab') {
+        tab();
         return;
       }
 
